@@ -87,7 +87,7 @@ Kohana::modules(array(
 	// 'pagination' => MODPATH.'pagination', // Paging of results
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-	'rest_client'   => MODPATH.'rest_client',  // REST client
+	'rest'          => MODPATH.'rest',       // REST client
 	'xml'           => MODPATH.'xml',          // XML utility library 
 	//'rest_api'      => MODPATH.'rest_api',  // REST-ful API 
 	));
@@ -96,6 +96,24 @@ Kohana::modules(array(
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+
+Route::set('admin', 'admin(/<controller>(/<action>(/<id>)))')
+  ->defaults(array(
+    'directory'  => 'admin',
+    'controller' => 'dashboard',
+    'action'     => 'index',
+  ));
+
+// loads flat page
+Route::set('page', '<page>',
+  array(
+    'page' => '[a-zA-Z0-9_/]+',
+  ))
+  ->defaults(array(
+    'controller' => 'page',
+    'action'     => 'load',
+  ));
+
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'controller' => 'welcome',
