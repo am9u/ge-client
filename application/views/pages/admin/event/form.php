@@ -73,7 +73,7 @@
     <?php echo $venue['city'] ?>, <?php echo $venue['state_province'] ?> <?php /* echo $venue['zip'] */ ?>
 
     <div class="form-field">
-        <div class="input"><?php echo Form::button('save', 'Create Event', array('type' => 'submit')); ?></div>
+        <div class="input"><?php echo Form::button('save', (empty($event)) ? 'Create' : 'Edit'.' Event', array('type' => 'submit')); ?></div>
     </div>
     
 
