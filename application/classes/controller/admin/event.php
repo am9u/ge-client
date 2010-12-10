@@ -55,10 +55,10 @@ class Controller_Admin_Event extends Controller_Admin_Page
             $name = $event->get('name');
 
             $oevents[] = array(
-                'id'          => $event->attributes('id'), //['xml_attributes']['id'],
+                'id'          => $event->attributes('id'), 
                 'name'        => $event->name->value(),
                 'date'        => Date::formatted_time($event->datetime->value(), 'm/d/y', 'America/New_York'), // @TODO: account for timezone of group! ie: NY.com vs LA.com
-                'time'        => Date::formatted_time($event->datetime->value(), 'g:i A', 'America/New_York'), // $date->format("g:i A"),
+                'time'        => Date::formatted_time($event->datetime->value(), 'g:i A', 'America/New_York'), 
                 'description' => $event->description->value()
             );
         }
