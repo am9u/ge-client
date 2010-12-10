@@ -42,10 +42,6 @@ class Controller_Admin_Event extends Controller_Admin_Page
         // working with the XML response
         $data   = XML::factory(NULL, NULL, $response->data);
         $data   = $data;
-        // $this->request->response = print_r($data);
-
-        //$events = $data['events'][0]['event'];
-
 
         $oevents = array();
 
@@ -54,8 +50,6 @@ class Controller_Admin_Event extends Controller_Admin_Page
         foreach($events as $event)
         {
             $name = $event->get('name');
-
-            //print_r($name['dom_node']);
 
             $oevents[] = array(
                 'id'          => $event->attributes('id'), //['xml_attributes']['id'],
@@ -66,36 +60,9 @@ class Controller_Admin_Event extends Controller_Admin_Page
             );
         }
 
-        //echo Kohana::debug($oevents);
-
         $this->page_title = "Events";
         $this->_content = View::factory("pages/admin/event/index")
                             ->bind("events", $oevents);
-
-
-        //another example of hitting a REST endpoint
-        //
-        //$client   = REST_client::instance('lastfm');
-        //$response = $client->get('', array(
-        //        'method'  => 'user.getrecenttracks',
-        //        'user'    => 'jonnyheadphones',
-        //        'api_key' => 'b25b959554ed76058ac220b7b2e0a026'
-        //    ));
-
-        // working with the REST response
-        //
-        // $this->request->response = $client->last_uri.'<br/>';
-        // $this->request->response .= 'status: '.$response->status.'<br/>';
-        // $this->request->response .= $response->data;
-
-        // TODO: figure out how the XML library's get() method's return value works!
-        //
-        // $events = $data->get('event');
-        // $this->request->response = print_r($events).'<br/><br/>';
-        // foreach($events as $event)
-        // {
-        //     $this->request->response .= $event->nodeValue.'<br/>';
-        // }
 
     }
 
