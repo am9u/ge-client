@@ -150,10 +150,21 @@ class Controller_Admin_Event extends Controller_Admin_Page
             // @TODO: insert validation here...
 
             $response = $client->put('event/update/'.$_POST['id'], $_POST);
+            $data = XML::factory(NULL, NULL, $response->data);
+            $message = $data->status->value();
 
-            //echo ($response->data);
+            if($response->status == '200')
+            {
+                $event = array(
+                        'id'          => $data->events->event->attributes('id'),
+                        'name'        => $data->events->event->name->value(),
+                        'datetime'    => $data->events->event->datetime->value(),
+                        'description' => $data->events->event->description->value(),
+                        'venue_id'    => $data->events->event->venue->attributes('id'),
+                    );
+            }
 
-            $this->_content = $view->bind('message', $response->status);
+            $this->_content = $view->bind('message', $message);
 
         }
     }
