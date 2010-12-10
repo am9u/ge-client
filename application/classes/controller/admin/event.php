@@ -41,39 +41,46 @@ class Controller_Admin_Event extends Controller_Admin_Page
 
         // working with the XML response
         $data   = XML::factory(NULL, NULL, $response->data);
-        $data   = $data->as_array();
+        $data   = $data;
         // $this->request->response = print_r($data);
 
-        $events = $data['events'][0]['event'];
+        //$events = $data['events'][0]['event'];
+
 
         $oevents = array();
 
+        $events = $data->get('event');
+
         foreach($events as $event)
         {
-            $date = new DateTime($event['datetime'][0]);
+            $name = $event->get('name');
+
+            //print_r($name['dom_node']);
 
             $oevents[] = array(
-                'id'          => $event['xml_attributes']['id'],
-                'name'        => $event['name'][0],
-                'date'        => $date->format("m/d/y"), // @TODO: account for timezone of group! ie: NY.com vs LA.com
-                'time'        => $date->format("g:i A"),
-                'description' => $event['description'][0],
+                'id'          => $event->attributes('id'), //['xml_attributes']['id'],
+                'name'        => $event->name->value(),
+                'date'        => Date::formatted_time($event->datetime->value(), 'm/d/y', 'America/New_York'), // @TODO: account for timezone of group! ie: NY.com vs LA.com
+                'time'        => Date::formatted_time($event->datetime->value(), 'g:i A', 'America/New_York'), // $date->format("g:i A"),
+                'description' => $event->description->value()
             );
         }
+
+        //echo Kohana::debug($oevents);
 
         $this->page_title = "Events";
         $this->_content = View::factory("pages/admin/event/index")
                             ->bind("events", $oevents);
 
 
-        // another example of hitting a REST endpoint
+        //another example of hitting a REST endpoint
         //
-        // $client   = REST_client::instance('lastfm');
-        // $response = $client->get('', array(
-        //         'method'  => 'user.getrecenttracks',
-        //         'user'    => 'jonnyheadphones',
-        //         'api_key' => 'b25b959554ed76058ac220b7b2e0a026'
-        //     ));
+        //$client   = REST_client::instance('lastfm');
+        //$response = $client->get('', array(
+        //        'method'  => 'user.getrecenttracks',
+        //        'user'    => 'jonnyheadphones',
+        //        'api_key' => 'b25b959554ed76058ac220b7b2e0a026'
+        //    ));
 
         // working with the REST response
         //
