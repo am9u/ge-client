@@ -3,6 +3,10 @@
 class Controller_Admin_Event extends Controller_Admin_Page
 {
 
+    /**
+     * Returns Array of Venue hashes
+     * @TODO: move this to a Helper or Model_Venue(extends from Model_XMLRPC?)
+     */
     private function _get_venues()
     {
         // get data from REST endpoint
@@ -11,28 +15,27 @@ class Controller_Admin_Event extends Controller_Admin_Page
 
         // working with the XML response
         $data   = XML::factory(NULL, NULL, $response->data);
-        $data   = $data->as_array();
-
         $venues = array();
-        foreach($data['venues'][0]['venue'] as $venue)
+
+        foreach($data->get('venue') as $venue)
         {
-            // $venues[$venue['xml_attributes']['id']] = array(
-            //     'id'             => $venue['xml_attributes']['id'],
-            //     'name'           => $venue['name'][0],
-            //     'address_1'      => $venue['address'][0]['address_1'][0],
-            //     //'address_2'      => $venue['address'][0]['address_2'][0],
-            //     'city'           => $venue['address'][0]['city'][0],
-            //     'state_province' => $venue['address'][0]['state_province'][0],
-            //     //'zip'            => $venue['address'][0]['zip'][0],
-            // );
-
-            $venues[$venue['xml_attributes']['id']] = $venue['name'][0];
-
+            $venues[] = array(
+                'id'             => $venue->attributes('id'),
+                'name'           => $venue->name->value(),
+                'line_1'         => $venue->line_1->value(),
+                'line_2'         => $venue->line_2->value(),
+                'city'           => $venue->city->value(),
+                'state_province' => $venue->state_province->value(),
+                'zip'            => $venue->zip->value()
+            );
         }
 
         return $venues;
     }
 
+    /**
+     * Renders Events Admin index
+     */
     public function action_index()
     {
         // get data from REST endpoint
@@ -67,129 +70,123 @@ class Controller_Admin_Event extends Controller_Admin_Page
     }
 
 
+    /**
+     * Renders Create Event Admin page
+     */
     public function action_create() 
     {
-        $log = Kohana_Log::instance();
+        $this->page_title = "Create Event";
 
-        if( ! isset($_POST['submit']))
+        $view = View::factory("pages/admin/event/create");
+
+        $venues = $this->_get_venues();
+        $view->bind('venues', $venues);
+
+        if( ! $_POST)
         {
-            $venues = $this->_get_venues();
-            Kohana::$log->add('debug action_create()', 'number of venues='.count($venues));
-
-            $view = View::factory('admin/event/create');
-            $view->bind('venues', $venues);
-            $this->request->response = $view;
+            $this->_content = $view;
         }
         else 
         {
             $client   = REST_client::instance('api_writer');
             $data     = array();
-            // print_r($_POST);
-            foreach($_POST as $key => $val)
-            {
-                if(is_array($val))
-                {
-                    foreach($val as $i => $v)
-                    {
-                        $data[$key.'['.$i.']'] = $v;
-                    }
-                }
-                else
-                {
-                    $data[$key] = $val;   
-                }
-            }
 
-            $log->add('admin event create', 'POST request to API made');
-            $log->add('admin event create', '$_POST size is '.count($data));
-            $log->add('admin event create', '$_POST is '.$data);
-            $log->write();
+            // @TODO: insert validation here...
 
-            print_r($data);
+            $response = $client->post('event', $_POST);
 
-            $response = $client->post('event', $data);
+            $data = XML::factory(NULL, NULL, $response->data);
 
             if($response->status == '200')
             {
-                $out = 'Successfully created Event<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
+                Request::instance()->redirect(Request::instance()->uri(array('action' => 'edit', 'id' => $data->event->attributes('id'))));
             }
             else
             {
-                $out = 'Error creating Event<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
+                //$out = 'Error creating Event<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
+                $message = $data->status->value();
+                $view->bind('message', $message);
+                $this->_content = $view;
             }
-
-            $this->request->response = $out;
         }
     }
 
-    public function action_create_photo()
+    /**
+     * Renders Edit Event Admin page
+     */
+    public function action_edit($id=NULL)
     {
-        if( ! isset($_POST['submit']))
+        $this->page_title = "Edit Event";
+
+        $view = View::factory("pages/admin/event/edit");
+
+        // get data from REST endpoint
+        $client   = REST_client::instance(); 
+        $response = $client->get('event/'.$id);
+
+        $data = XML::factory(NULL, NULL, $response->data);
+
+        $event = array(
+                'id'          => $data->events->event->attributes('id'),
+                'name'        => $data->events->event->name->value(),
+                'datetime'    => $data->events->event->datetime->value(),
+                'description' => $data->events->event->description->value(),
+                'venue_id'    => $data->events->event->venue->attributes('id'),
+            );
+
+        $venues = $this->_get_venues();
+
+        $view->bind('event', $event);
+        $view->bind('venues', $venues);
+
+        if( ! $_POST)
         {
-            $view = View::factory('upload');
-            $this->request->response = $view;
-        }
-        else 
-        {
-            $client   = REST_client::instance('file_upload');
-
-            Upload::save($_FILES['photo'], $_FILES['photo']['name']);
-            $photo_path = '@upload/'.$_FILES['photo']['name'].';type='.$_FILES['photo']['type'];
-            $data = array('photo' => $photo_path);
-
-            // $response = $client->post('photo', $data);
-            $response = $client->post('photo', $data);
-
-            if($response->status == '200')
-            {
-                $out = 'Successfully created photo<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
-            }
-            else
-            {
-                $out = 'Error creating photo<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
-            }
-
-            $this->request->response = $out;
-        }
-    }
-
-    public function action_update ($id=NULL)
-    {
-        if( ! isset($_POST['id']))
-        {
-            $view = View::factory('admin/event/update');
-            $view->bind('event', $event);
-            $event = ORM::factory('event', $id);
-            $this->request->response = $view;
+            $this->_content = $view;
         }
         else 
         {
             $client   = REST_client::instance('api_writer');
+
+            // @TODO: insert validation here...
+
             $response = $client->put('event/update/'.$_POST['id'], $_POST);
-            
-            if($response->status == '200')
-            {
-                $out = 'Successfully updated Event ID='.$_POST['id'].'<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
-            }
-            else
-            {
-                $out = 'Error updating Event ID='.$_POST['id'].'<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
-            }
 
-            $this->request->response = $out;
+            //echo ($response->data);
 
-            // $put_request = Request::factory('/event/update/'.$_POST['id']);
-            // // $put_request->method = 'PUT';
-            // Request::$method = 'PUT';
-
-            // $data = $put_request->execute()->send_headers()->response;
-            // 
-            // // Kohana::debug($data);
-
-            // Request::$method = 'GET';
-            // $this->request->response = $data;
-
+            $this->_content = $view->bind('message', $response->status);
 
         }
     }
+
+    //public function action_create_photo()
+    //{
+    //    if( ! isset($_POST['submit']))
+    //    {
+    //        $view = View::factory('upload');
+    //        $this->request->response = $view;
+    //    }
+    //    else 
+    //    {
+    //        $client   = REST_client::instance('file_upload');
+
+    //        Upload::save($_FILES['photo'], $_FILES['photo']['name']);
+    //        $photo_path = '@upload/'.$_FILES['photo']['name'].';type='.$_FILES['photo']['type'];
+    //        $data = array('photo' => $photo_path);
+
+    //        // $response = $client->post('photo', $data);
+    //        $response = $client->post('photo', $data);
+
+    //        if($response->status == '200')
+    //        {
+    //            $out = 'Successfully created photo<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
+    //        }
+    //        else
+    //        {
+    //            $out = 'Error creating photo<br/>Status code: '.$response->status.'<br/>Response:'.$response->data;
+    //        }
+
+    //        $this->request->response = $out;
+    //    }
+    //}
+
 }

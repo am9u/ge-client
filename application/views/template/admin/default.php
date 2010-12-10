@@ -11,7 +11,7 @@
 	</head>
 
 <body>
-<div id="container">
+<div id="container" class="page<?php echo empty($page_title) ? '' : " page-".str_replace('/', '-', Request::instance()->uri()); ?>">
     <div id="header">
         <?php echo empty($site_title) ? '' : '<h1>'.$site_title.'</h1>'; ?>
         <h2>Admin: <?php echo $page_title; ?></h2>

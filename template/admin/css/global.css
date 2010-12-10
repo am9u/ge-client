@@ -46,6 +46,19 @@ ul {
 #main thead th, #main thead td {
  background:#cfcfcf;
 }
+#main .form .form-field {
+ position:relative;
+ width:8em;
+ min-height:1.5em;
+ margin:.5em 0;
+}
+#main .form .form-field-textarea {
+ min-height:10em;
+}
+#main .form .form-field .input {
+ position:absolute;
+ left:100%;
+}
 
 #footer {
  border-top:1px solid #ccc;
