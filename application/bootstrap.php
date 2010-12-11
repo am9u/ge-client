@@ -105,14 +105,14 @@ Route::set('admin', 'admin(/<controller>(/<action>(/<id>)))')
   ));
 
 // loads flat page
-Route::set('page', '<page>',
-  array(
-    'page' => '[a-zA-Z0-9_/]+',
-  ))
-  ->defaults(array(
-    'controller' => 'page',
-    'action'     => 'load',
-  ));
+//Route::set('page', '<page>',
+//  array(
+//    'page' => '[a-zA-Z0-9_/]+',
+//  ))
+//  ->defaults(array(
+//    'controller' => 'page',
+//    'action'     => 'load',
+//  ));
 
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
