@@ -14,7 +14,9 @@ class Controller_Account extends Controller_Page
         {
             echo($token);
 
-            $client   = REST_client::instance('api_writer');
+            //$client   = ServiceClient::factory('user');
+            
+            $client = REST_client::instance('api_writer');
             $response = $client->post('user/identify', array('token' => $token));
             $data     = XML::factory(NULL, NULL, $response->data);
 
@@ -33,6 +35,7 @@ class Controller_Account extends Controller_Page
 
     public function action_login()
     {
+        Kohana::$log->add('Controller_Account->login()', 'CALLED!');
         $this->page_title = 'Login';
         $view = View::factory('pages/account/login');
 
@@ -44,14 +47,20 @@ class Controller_Account extends Controller_Page
         {
             // @TODO: validation here!
 
-            $client   = REST_client::instance('api_writer');
-            $response = $client->post('user/identify', $_POST);
-            $data     = XML::factory(NULL, NULL, $response->data);
+            Kohana::$log->add('Controller_Account->login()', 'calling ServiceClient::factory(user)');
+            $client = ServiceClient::factory('user');
 
-            if($response->status == '200')
+            $client->identify($_POST);
+
+            //$client   = REST_client::instance('api_writer');
+            //$response = $client->post('user/identify', $_POST);
+            //$data     = XML::factory(NULL, NULL, $response->data);
+
+            if($client->status['type'] === 'success')
             {
                 // set cookie
-                $token = $data->user->attributes('token');
+                //$token = $data->user->attributes('token');
+                $token = $client->data['token'];
                 Cookie::set('auth_token', $token);
 
                 // redirect
@@ -60,11 +69,22 @@ class Controller_Account extends Controller_Page
             }
             else
             {
-                $message = $data->status->value();
+                $message = $client->status['message']; // this might be cleaner: $client->response->status->message
+                //$message = $data->status->value();
                 $view->bind('message', $message);
                 $this->_content = $view;
             }
         }
+    }
+
+    public function action_logout()
+    {
+        $this->page_title = 'Logout';
+        $view = View::factory('pages/account/logout');
+
+        Cookie::delete('auth_token');
+
+        $this->_content = $view;
     }
 
 }
