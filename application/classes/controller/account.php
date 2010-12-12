@@ -5,14 +5,15 @@ class Controller_Account extends Controller_Page
     public function action_index()
     {
         $token = Cookie::get('auth_token');
+
         if($token === NULL )
         {
-            echo('<p>no token, so not logged in.</p>');
-            echo('<p>fake cookie: '.Cookie::salt('auth_token', '12345').'~12345</p>');
+            $this->_content = '<p>no token, so not logged in.</p>';
+            $this->_content .= '<p>fake cookie: '.Cookie::salt('auth_token', '12345').'~12345</p>';
         }
         else
         {
-            echo($token);
+           $this->_content = $token;
 
             //$client   = ServiceClient::factory('user');
             
@@ -22,12 +23,12 @@ class Controller_Account extends Controller_Page
 
             if($response->status == '200')
             {
-                echo('<p>logged in</p>');
+                $this->_content .= '<p>logged in</p>';
             }
             else
             {
                 Cookie::delete('auth_token');
-                echo('<p>invalid token, so not logged in.</p>');
+                $this->_content .= '<p>invalid token, so not logged in.</p>';
             }
         }
     }
@@ -52,10 +53,6 @@ class Controller_Account extends Controller_Page
 
             $client->identify($_POST);
 
-            //$client   = REST_client::instance('api_writer');
-            //$response = $client->post('user/identify', $_POST);
-            //$data     = XML::factory(NULL, NULL, $response->data);
-
             if($client->status['type'] === 'success')
             {
                 // set cookie
@@ -70,7 +67,6 @@ class Controller_Account extends Controller_Page
             else
             {
                 $message = $client->status['message']; // this might be cleaner: $client->response->status->message
-                //$message = $data->status->value();
                 $view->bind('message', $message);
                 $this->_content = $view;
             }
