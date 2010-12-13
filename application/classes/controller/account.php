@@ -47,6 +47,55 @@ class Controller_Account extends Controller_AuthPage
         }
     }
 
+    public function action_register()
+    {
+
+        if(self::logged_in() === TRUE)
+        {
+            $redirect_url = (empty($_POST['redirect_url'])) ? Request::instance()->uri(array('action' => 'index')) : $_POST['redirect_url'];
+            Request::instance()->redirect($redirect_url);
+        }
+
+        $this->page_title = 'Register';
+        $view = View::factory('pages/account/register');
+
+        if ( ! $_POST)
+        {
+            $this->_content = $view;
+        }
+        else
+        {
+            // @TODO: validation here!
+
+            $client = ServiceClient::factory('user');
+
+            // create user
+            $client->create($_POST);
+
+            if($client->status['type'] === 'success')
+            {
+                // log user in
+                $client->identify($_POST);
+
+                if($client->status['type'] === 'success')
+                {
+                    // set cookie
+                    Cookie::set('auth_token', $client->data->token);
+
+                    // redirect
+                    $redirect_url = (empty($_POST['redirect_url'])) ? Request::instance()->uri(array('action' => 'index')) : $_POST['redirect_url'];
+                    Request::instance()->redirect($redirect_url);
+                }
+            }
+            else
+            {
+                $message = $client->status['message']; // this might be cleaner: $client->response->status->message
+                $view->bind('message', $message);
+                $this->_content = $view;
+            }
+        }
+    }
+
     public function action_logout()
     {
         $this->page_title = 'Logout';
