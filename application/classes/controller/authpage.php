@@ -28,11 +28,11 @@ class Controller_AuthPage extends Controller_Page
 
         // Check user auth and role
         $action_name = Request::instance()->action;
-        if (($this->auth_required !== FALSE && self::identify($this->auth_required) === FALSE)
+        if (($this->auth_required !== FALSE && self::logged_in($this->auth_required) === FALSE)
                 || (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
-                self::identify($this->secure_actions[$action_name]) === FALSE))
+                self::logged_in($this->secure_actions[$action_name]) === FALSE))
         {
-            if (self::identify())
+            if (self::logged_in())
             {
                 Request::instance()->redirect(Route::get('default')->uri(array('controller' => 'account', 'action' => 'noaccess')));
             }
@@ -44,7 +44,7 @@ class Controller_AuthPage extends Controller_Page
 
     }
 
-    private static function identify($roles=NULL)
+    protected static function logged_in($roles=NULL)
     {
         $logged_in = FALSE;
 
@@ -58,7 +58,7 @@ class Controller_AuthPage extends Controller_Page
             {
                 $user_roles = $client->data->roles;
 
-                if($roles !== NULL)
+                if($roles === NULL)
                 {
                     $logged_in = TRUE;
                 }
@@ -70,6 +70,7 @@ class Controller_AuthPage extends Controller_Page
                 {
                     foreach($roles as $role)
                     {
+                        $logged_in = TRUE;
                         if( ! in_array($role, $user_roles))
                         {
                             $logged_in = FALSE;
