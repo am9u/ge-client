@@ -1,42 +1,19 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Account extends Controller_Page
+class Controller_Account extends Controller_AuthPage
 {
+    public $secure_actions = array(
+            'index' => 'login',
+        );
+
     public function action_index()
     {
-        $token = Cookie::get('auth_token');
-
-        if($token === NULL )
-        {
-            $this->_content = '<p>no token, so not logged in.</p>';
-            $this->_content .= '<p>fake cookie: '.Cookie::salt('auth_token', '12345').'~12345</p>';
-        }
-        else
-        {
-           $this->_content = $token;
-
-            //$client   = ServiceClient::factory('user');
-            
-            $client = REST_client::instance('api_writer');
-            $response = $client->post('user/identify', array('token' => $token));
-            $data     = XML::factory(NULL, NULL, $response->data);
-
-            if($response->status == '200')
-            {
-                $this->_content .= '<p>logged in</p>';
-            }
-            else
-            {
-                Cookie::delete('auth_token');
-                $this->_content .= '<p>invalid token, so not logged in.</p>';
-            }
-        }
+        $this->page_title = 'My Account';
+        $this->_content = 'Logged In!';
     }
-
 
     public function action_login()
     {
-        Kohana::$log->add('Controller_Account->login()', 'CALLED!');
         $this->page_title = 'Login';
         $view = View::factory('pages/account/login');
 
@@ -48,7 +25,6 @@ class Controller_Account extends Controller_Page
         {
             // @TODO: validation here!
 
-            Kohana::$log->add('Controller_Account->login()', 'calling ServiceClient::factory(user)');
             $client = ServiceClient::factory('user');
 
             $client->identify($_POST);
@@ -56,9 +32,7 @@ class Controller_Account extends Controller_Page
             if($client->status['type'] === 'success')
             {
                 // set cookie
-                //$token = $data->user->attributes('token');
-                $token = $client->data['token'];
-                Cookie::set('auth_token', $token);
+                Cookie::set('auth_token', $client->data->token);
 
                 // redirect
                 $redirect_url = (empty($_POST['redirect_url'])) ? Request::instance()->uri(array('action' => 'index')) : $_POST['redirect_url'];
