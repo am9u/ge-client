@@ -52,7 +52,7 @@ class Controller_Website extends Controller_Template
 	{
 		$this->template
             ->bind('styles', $this->styles)
-			->bind('scripts', $this->scripts) ;
+			->bind('scripts', $this->scripts);
 		parent::after();
 	}
 
