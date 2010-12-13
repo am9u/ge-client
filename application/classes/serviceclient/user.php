@@ -34,4 +34,10 @@ class ServiceClient_User extends ServiceClient
         $this->data = new ServiceClient_Driver_User($data->user);
     }
 
+    public function create($user_data=NULL)
+    {
+        $resource_uri = 'user/create';
+        $data = $this->_request(self::HTTP_POST, $resource_uri, $user_data);
+    }
+
 }
