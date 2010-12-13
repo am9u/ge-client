@@ -106,4 +106,11 @@ class Controller_Account extends Controller_AuthPage
         $this->_content = $view;
     }
 
+    public function action_noaccess()
+    {
+        $this->page_title = 'Access Denied';
+        $view = View::factory('pages/account/noaccess');
+        $this->_content = $view;
+    }
+
 }
