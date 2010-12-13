@@ -31,16 +31,7 @@ class ServiceClient_User extends ServiceClient
                 )));
         }
 
-        $this->data = self::translate_response_data($data);
+        $this->data = new ServiceClient_Driver_User($data->user);
     }
 
-    private static function translate_response_data($data=NULL)
-    {
-        $user = array(
-            self::TOKEN_NAME   => $data->user->attributes(self::TOKEN_NAME),
-            self::USERNAME_KEY => $data->user->username->value(),
-        );
-
-        return $user;
-    }
 }
