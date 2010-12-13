@@ -2,6 +2,21 @@
 
 class Controller_Event extends Controller_Page
 {
+    public function action_index()
+    {
+        $client = ServiceClient::factory('event');
+        $client->get();
+
+        if($client->status['type'] == 'success')
+        {
+            $view = View::factory('pages/event/index')
+                        ->bind('events', $client->data);
+
+            $this->page_title = 'Events';
+            $this->_content = $view;
+        }
+    }
+
     public function action_view($id=NULL)
     {
         if($id !== NULL)
