@@ -4,6 +4,12 @@
 
 <?php echo Form::open(); ?>
 
+    <?php
+        if (isset($_GET['continue']) OR isset($_POST['continue'])) 
+        {
+            echo Form::hidden('redirect_url', $_REQUEST['continue']);
+        }
+    ?>
     <div class="form-field">
         <?php
             echo Form::label('username', 'Username'); 

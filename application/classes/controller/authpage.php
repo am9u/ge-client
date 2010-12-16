@@ -26,19 +26,21 @@ class Controller_AuthPage extends Controller_Page
         // Open session
         $this->session= Session::instance();
 
+        $request = Request::instance();
+
         // Check user auth and role
-        $action_name = Request::instance()->action;
+        $action_name = $request->action;
         if (($this->auth_required !== FALSE && self::logged_in($this->auth_required) === FALSE)
                 || (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
                 self::logged_in($this->secure_actions[$action_name]) === FALSE))
         {
             if (self::logged_in())
             {
-                Request::instance()->redirect(Route::get('default')->uri(array('controller' => 'account', 'action' => 'noaccess')));
+                $request->redirect(Route::get('default')->uri(array('controller' => 'account', 'action' => 'noaccess')));
             }
             else
             {
-                Request::instance()->redirect(Route::get('default')->uri(array('controller' => 'account', 'action' => 'login')));
+                $request->redirect(Route::get('default')->uri(array('controller' => 'account', 'action' => 'login')).URL::query(array('continue' => $request->url())));
             }
         }
 
