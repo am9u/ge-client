@@ -23,7 +23,7 @@ class ServiceClient_Driver_User
         $this->groups = array();
         foreach($user_data->groups->get('group') as $group)
         {
-            array_push($this->groups, array('id' => $group->attributes('id'), 'name' => $group->value()));
+            array_push($this->groups, array('id' => $group->attributes('id'), 'name' => $group->name->value()));
         }
     }
 }
