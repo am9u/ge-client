@@ -14,7 +14,7 @@ class ServiceClient_Driver_User
         
         foreach($user_data->get('role') as $role)
         {
-            array_push($this->roles, $role->value());
+            array_push($this->roles, $role->name->value());
         }
     }
 }
