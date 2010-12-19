@@ -17,6 +17,8 @@
         <h2>Admin: <?php echo $page_title; ?></h2>
     </div>
 
+    <?php echo View::factory('template/admin/include/nav'); ?>
+
     <div id="main">
         <?php echo empty($content) ? '' : $content; ?>
     </div>

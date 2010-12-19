@@ -26,6 +26,8 @@ ul {
 
 #main {
  min-height:450px;
+ margin-left:220px;
+
  padding:1em 1.5em 2em;
 }
 #main h3 {
@@ -60,9 +62,16 @@ ul {
  left:100%;
 }
 
+#nav_admin {
+ float:left;
+ width:200px;
+ font-size:.8em;
+}
+
 #footer {
  border-top:1px solid #ccc;
  padding:2em 1.5em 4em;
  font-size:75%;
  text-align:right;
 }
+

@@ -1,6 +1,4 @@
 
-<?php echo HTML::anchor(Request::instance()->uri(array('action' => 'create')), 'Create a New Venue'); ?>
-
 <?php if (count($venues) < 1) { ?>
 
     <p>There are no venues.</p>

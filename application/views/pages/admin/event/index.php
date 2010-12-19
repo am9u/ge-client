@@ -1,6 +1,4 @@
 
-<?php echo HTML::anchor(Request::instance()->uri(array('action' => 'create')), 'Create a New Event'); ?>
-
 <h3>Upcoming Events</h3>
 
 <?php if (count($events) < 1) { ?>
