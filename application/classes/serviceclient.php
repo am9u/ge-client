@@ -11,6 +11,8 @@ abstract class ServiceClient
 
     protected $response; // response from REST_Client request
 
+    protected $_filter = NULL; // filter parameter to prepend to service endpoint
+
 	/**
 	 * Constants for supported HTTP methods
 	 */
@@ -26,21 +28,31 @@ abstract class ServiceClient
 	 * @param   string  client name
 	 * @return  ServiceClient
 	 */
-	public static function factory($client)
+	public static function factory($client, $config = NULL)
 	{
 		// Set class name
 		$client = 'ServiceClient_'.ucfirst($client);
 
-		return new $client();
+		return new $client($config);
 	}
 
-    public function __construct() 
+    public function __construct($config = NULL) 
     {
         $this->_client = REST_Client::instance($this->_client_type);
+
+        Kohana::$log->add('debug', get_class($this).'__construct() -- $config='.$config);
+
+        if(isset($config['group']))
+        {
+            Kohana::$log->add('debug', get_class($this).'__construct() -- $config[group]='.$config['group']);
+            $this->_filter = array('group' => str_replace(' ', '-', $config['group']));
+        }
     }
 
     protected function _request($method=self::HTTP_GET, $url, $data=NULL)
     {
+        Kohana::$log->add('debug', 'ServiceClient::_request() -- $url='.$url);
+
         if($method == self::HTTP_GET)
         {
             $this->response = $this->_client->get($url);
