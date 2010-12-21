@@ -36,6 +36,27 @@ class ServiceClient_Group extends ServiceClient
         }
     }
 
+    public function get_base_groups($id=NULL)
+    {
+        $this->_client_type = 'default';
+        $resource_uri = 'group/base';
+        $data = $this->_request(self::HTTP_GET, $resource_uri);
+        $groups = $data->groups->get('group');
+
+        if(count($groups) === 0)
+        {
+            $this->data = NULL;
+        }
+        else
+        {
+            $this->data = array();
+            foreach($groups as $group)
+            {
+                array_push($this->data, new ServiceClient_Driver_Group($group));
+            }
+        }
+    }
+
     public function get_by_name($name)
     {
         $this->_client_type = 'default';
@@ -67,4 +88,11 @@ class ServiceClient_Group extends ServiceClient
             }
         }
     }
+
+    public function create($group_data=NULL)
+    {
+        $resource_uri = 'group/create';
+        $data = $this->_request(self::HTTP_POST, $resource_uri, $group_data);
+    }
+
 }
