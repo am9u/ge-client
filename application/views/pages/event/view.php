@@ -1,3 +1,4 @@
+<?php echo Request::instance()->param('group'); ?>
 
 <h2><?php echo $event->name; ?></h2>
 <div class="dateline">

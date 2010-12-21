@@ -5,26 +5,27 @@
 <div class="form">
 
 <?php echo Form::open() ?>
-    <?php if ( ! empty($event)) { echo Form::hidden('id', $event['id']); } ?>
+    <?php if ( ! empty($event)) { echo Form::hidden('id', $event->id); } ?>
+    <?php if ( ! empty($group_id)) { echo Form::hidden('group_id', $group_id); } ?>
 
     <div class="form-field">
         <?php 
             echo Form::label('datetime', 'DateTime'); 
-            echo Form::input('datetime', (empty($event)) ? Date::formatted_time('now', 'Y-m-d H:i:s') : $event['datetime'], array('class' => 'input'));
+            echo Form::input('datetime', (empty($event)) ? Date::formatted_time('now', 'Y-m-d H:i:s') : $event->datetime, array('class' => 'input'));
         ?>
     </div>
 
     <div class="form-field">
         <?php 
             echo Form::label('name', 'Name'); 
-            echo Form::input('name', (empty($event)) ? '' : $event['name'], array('class' => 'input'));
+            echo Form::input('name', (empty($event)) ? '' : $event->name, array('class' => 'input'));
         ?>
     </div>
 
     <div class="form-field form-field-textarea">
         <?php 
             echo Form::label('description', 'Description'); 
-            echo Form::textarea('description', (empty($event)) ? '' : $event['description'], array(
+            echo Form::textarea('description', (empty($event)) ? '' : $event->description, array(
                 'width'  => '40',
                 'height' => '20',
                 'class'  => 'input' 
@@ -49,7 +50,7 @@
             $select_venues = _select_element_arr($venues, 'id', 'name');
 
             echo Form::label('venue_id', 'Venue'); 
-            echo Form::select('venue_id', $select_venues, (empty($event)) ? NULL : $event['venue_id'], array('class' => 'input'));
+            echo Form::select('venue_id', $select_venues, (empty($event)) ? NULL : $event->venue_id, array('class' => 'input'));
         ?>
     </div>
 

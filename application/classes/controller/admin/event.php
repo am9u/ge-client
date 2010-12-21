@@ -38,35 +38,33 @@ class Controller_Admin_Event extends Controller_Admin_Page
      */
     public function action_index()
     {
-        // get data from REST endpoint
-        $client   = REST_client::instance(); 
-        $response = $client->get('event');
-
-        // working with the XML response
-        $data   = XML::factory(NULL, NULL, $response->data);
-        $data   = $data;
-
-        $oevents = array();
-
-        $events = $data->get('event');
-
-        foreach($events as $event)
+        $group_id = NULL;
+        $group_name = Request::instance()->param('group', NULL);
+        if($group_name !== NULL)
         {
-            $name = $event->get('name');
-
-            $oevents[] = array(
-                'id'          => $event->attributes('id'), 
-                'name'        => $event->name->value(),
-                'date'        => Date::formatted_time($event->datetime->value(), 'm/d/y', 'America/New_York'), // @TODO: account for timezone of group! ie: NY.com vs LA.com
-                'time'        => Date::formatted_time($event->datetime->value(), 'g:i A', 'America/New_York'), 
-                'description' => $event->description->value()
-            );
+            $group_client = ServiceClient::factory('group');
+            $group_client->get_by_name($group_name);
+            if($group_client->status['type'] !== 'error')
+            {
+                $group_id = $group_client->data->id;
+            }
         }
 
         $this->page_title = "Events";
-        $this->_content = View::factory("pages/admin/event/index")
-                            ->bind("events", $oevents);
+        $view = View::factory("pages/admin/event/index");
 
+        $client = ServiceClient::factory('event', array(
+                        'group' => $group_id,
+                    ));
+
+        $client->get();
+
+        if($client->status['type'] !== 'error')
+        {
+            $view->bind('events', $client->data);    
+        }
+
+        $this->_content = $view;
     }
 
 
@@ -75,12 +73,30 @@ class Controller_Admin_Event extends Controller_Admin_Page
      */
     public function action_create() 
     {
+        $group_id = NULL;
+        $group_name = Request::instance()->param('group', NULL);
+        if($group_name !== NULL)
+        {
+            $group_client = ServiceClient::factory('group');
+            $group_client->get_by_name($group_name);
+            if($group_client->status['type'] !== 'error')
+            {
+                $group_id = $group_client->data->id;
+                Kohana::$log->add('debug', 'Controller_Admin_Event::action_create() -- $group_id='.$group_id);
+            }
+        }
+
         $this->page_title = "Create Event";
 
         $view = View::factory("pages/admin/event/create");
 
         $venues = $this->_get_venues();
         $view->bind('venues', $venues);
+
+        if($group_id !== NULL)
+        {
+            $view->bind('group_id', $group_id);
+        }
 
         if( ! $_POST)
         {
@@ -97,7 +113,7 @@ class Controller_Admin_Event extends Controller_Admin_Page
 
             $data = XML::factory(NULL, NULL, $response->data);
 
-            if($response->status == '200')
+            if($response->status == '201')
             {
                 Request::instance()->redirect(Request::instance()->uri(array('action' => 'edit', 'id' => $data->event->attributes('id'))));
             }
@@ -120,23 +136,15 @@ class Controller_Admin_Event extends Controller_Admin_Page
 
         $view = View::factory("pages/admin/event/edit");
 
-        // get data from REST endpoint
-        $client   = REST_client::instance(); 
-        $response = $client->get('event/'.$id);
+        $client = ServiceClient::factory('event');
+        $client->get(Request::instance()->param('id', NULL));
 
-        $data = XML::factory(NULL, NULL, $response->data);
-
-        $event = array(
-                'id'          => $data->events->event->attributes('id'),
-                'name'        => $data->events->event->name->value(),
-                'datetime'    => $data->events->event->datetime->value(),
-                'description' => $data->events->event->description->value(),
-                'venue_id'    => $data->events->event->venue->attributes('id'),
-            );
+        if($client->status['type'] !== 'error')
+        {
+            $view->bind('event', $client->data);    
+        }
 
         $venues = $this->_get_venues();
-
-        $view->bind('event', $event);
         $view->bind('venues', $venues);
 
         if( ! $_POST)
