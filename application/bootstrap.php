@@ -104,6 +104,34 @@ Route::set('admin', 'admin(/<controller>(/<action>(/<id>)))')
     'action'     => 'index',
   ));
 
+Route::set('group_view', 'group(/<group>)/<controller>(/<action>(/<id>))',
+    array(
+        'controller' => 'event',
+    ))
+    ->defaults(array(
+        'group' => 'New York',
+        'controller' => 'event',
+        'action' => 'index'
+    ));
+
+Route::set('group', 'group(/<group>(/<controller>(/<action>(/<id>))))',
+    array(
+        'controller' => 'event',
+    ))
+    ->defaults(array(
+        'group' => 'New York',
+        'controller' => 'event',
+        'action' => 'index'
+    ));
+
+Route::set('group_admin', '<group>/admin(/<controller>(/<action>(/<id>)))')
+    ->defaults(array(
+        'group' => 'New York',
+        'directory' => 'admin',
+        'controller' => 'dashboard',
+        'action' => 'index'
+    ));
+
 // loads flat page
 //Route::set('page', '<page>',
 //  array(
