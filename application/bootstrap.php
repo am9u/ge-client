@@ -127,7 +127,7 @@ Route::set('group', 'group(/<group>(/<controller>(/<action>(/<id>))))',
 Route::set('group_admin', '<group>/admin(/<controller>(/<action>(/<id>)))')
     ->defaults(array(
         'group' => 'New York',
-        'directory' => 'admin',
+        'directory' => 'admin/group',
         'controller' => 'dashboard',
         'action' => 'index'
     ));

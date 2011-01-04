@@ -92,6 +92,17 @@ class ServiceClient_User extends ServiceClient
         }
     }
     
+    public function add_admin_to_group($post_data)
+    {
+        $resource_uri = 'user/add_admin_to_group';
+        $data = $this->_request(self::HTTP_POST, $resource_uri, $post_data);
+
+        if($this->status['type'] !== 'error')
+        {
+            $this->data = new ServiceClient_Driver_User($data->user);
+        }
+    }
+
     public function add_role($post_data)
     {
         $resource_uri = 'user/role';

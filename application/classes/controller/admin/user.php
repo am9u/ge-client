@@ -39,7 +39,7 @@ class Controller_Admin_User extends Controller_Admin_Page
                     $user_service_client->add_to_group($_POST);
                     break;
                 case 'make_group_admin':
-                    $user_service_client->make_group_admin($_POST);
+                    $user_service_client->add_admin_to_group($_POST);
                     break;
             }
 

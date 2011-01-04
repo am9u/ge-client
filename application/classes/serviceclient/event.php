@@ -43,4 +43,66 @@ class ServiceClient_Event extends ServiceClient
         }
     }
 
+    public function add_to_group($event_id, $group_id, $group_role_id = NULL)
+    {
+        $resource_uri = 'event/add_to_group'; 
+
+        $post_data = array(
+                'event_id' => $event_id,
+                'group_id' => $group_id,
+            );
+
+        if ($member_role_id !== NULL)
+        {
+           $post_data['group_role_id'] = $group_role_id;
+        }
+
+        $data = $this->_request(self::HTTP_POST, $resource_uri, $post_data);
+        $events = $data->events->get('event');
+
+        // no events in response
+        if(count($events) === 0)
+        {
+            $this->data = NULL;
+        }
+
+        // single event
+        else
+        {
+            $this->data = array();
+            foreach($events as $event)
+            {
+                array_push($this->data, new ServiceClient_Driver_Event($event));
+            }
+        }
+    }
+
+    public function make_public($event_id)
+    {
+        $resource_uri = 'event/make_public'; 
+
+        $post_data = array(
+                'event_id' => $event_id,
+            );
+
+        $data = $this->_request(self::HTTP_POST, $resource_uri, $post_data);
+        $events = $data->events->get('event');
+
+        // no events in response
+        if(count($events) === 0)
+        {
+            $this->data = NULL;
+        }
+
+        // single event
+        else
+        {
+            $this->data = array();
+            foreach($events as $event)
+            {
+                array_push($this->data, new ServiceClient_Driver_Event($event));
+            }
+        }
+    }
+
 }

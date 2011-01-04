@@ -8,6 +8,9 @@ class ServiceClient_Driver_Event
     public $date = NULL;
     public $time = NULL;
     public $description = NULL;
+    public $privacy_settings = NULL;
+
+    public $is_public = FALSE;
 
     public function __construct($event)
     {
@@ -19,5 +22,24 @@ class ServiceClient_Driver_Event
         $this->description = $event->description->value();
 
         $this->venue_id = $event->venue->attributes('id');
+
+        $this->privacy_settings = array();
+        foreach($event->privacy_settings->get('group') as $group)
+        {
+            $group_id = $group->attributes('id');
+
+            if ($group_id == 0)
+            {
+                $this->is_public = TRUE;
+            }
+            else
+            {
+                $group_roles = array();
+
+                array_push($group_roles, $group->attributes('role'));
+
+                $this->privacy_settings[$group_id] = $group_roles;
+            }
+        }
     }
 }

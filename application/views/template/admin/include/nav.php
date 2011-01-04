@@ -6,7 +6,7 @@
     <h3>Manage</h3>
     <ul>
         <?php /** Events */ ?>
-        <li><?php echo HTML::anchor(Route::get('admin')->uri(array('controller' => 'event')), 'Events'); ?>
+        <li><?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'event')), 'Events'); ?>
 
             <?php if ($request->controller === 'event') { ?>
                 <ul>
@@ -17,7 +17,7 @@
         </li>
 
         <?php /** Venues */ ?>
-        <li><?php echo HTML::anchor(Route::get('admin')->uri(array('controller' => 'venue')), 'Venues'); ?>
+        <li><?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue')), 'Venues'); ?>
         
             <?php if ($request->controller === 'venue') { ?>
                 <ul>
@@ -27,7 +27,7 @@
         </li>
 
         <?php /** Tags */ ?>
-        <li><?php echo HTML::anchor(Route::get('admin')->uri(array('controller' => 'tag')), 'Tags'); ?>
+        <li><?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'tag')), 'Tags'); ?>
         
             <?php if ($request->controller === 'tag') { ?>
                 <ul>
@@ -38,7 +38,7 @@
 
         <?php /** Dashboard */ ?>
         <?php if ($request->controller !== 'dashboard') { ?>
-            <li><?php echo HTML::anchor(Route::get('admin')->uri(array('controller' => 'dashboard')), 'Back to Admin Dashboard'); ?></li>
+            <li><?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'dashboard')), 'Back to Admin Dashboard'); ?></li>
         <?php } ?>
     </ul>
 </div>
