@@ -34,7 +34,7 @@
             ?>
 
             <div class="input" style="width:30em">
-                <?php echo Form::select('venue_id', $select_venues, (empty($event)) ? NULL : $event->venue_id, array('id' => 'venues_combobox')); ?>
+                <?php echo Form::select('venue_id', $select_venues, (empty($event)) ? NULL : $event->venue->id, array('id' => 'venues_combobox')); ?>
             </div>
         </div>
 
