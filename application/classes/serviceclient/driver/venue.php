@@ -9,5 +9,7 @@ class ServiceClient_Driver_Venue
     {
         $this->id          = $venue->attributes('id'); 
         $this->name        = $venue->name->value();
+
+        $this->address = new ServiceClient_Driver_Address($venue->address);
     }
 }
