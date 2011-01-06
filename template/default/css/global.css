@@ -1,0 +1,84 @@
+
+html, body {
+ font: normal 1em/1.5em "Helvetica Neue", "Helvetica", Arial, sans-serif;
+}
+
+h1, h2 {
+ font-size:1.5em;
+}
+ul {
+ list-style: square;
+ padding-left: 16px;
+}
+
+#container {
+ width: 990px;
+ margin: 0 auto;
+}
+
+#header {
+ padding:1em 1.5em 2em;
+ background:#ccc;
+}
+#header h1 {
+ float:right;
+}
+
+#main {
+ min-height:450px;
+ margin-left:220px;
+ padding:1em 1.5em 2em;
+}
+#main h3 {
+ font-weight:bold;
+ margin-bottom:.5em;
+}
+#main ul {
+ font-size:.9em;
+}
+
+#main table {
+ width:100%;
+ margin-bottom:2em;
+}
+#main th, #main td {
+ padding:.5em .75em;
+}
+#main thead th, #main thead td {
+ background:#cfcfcf;
+}
+#main .form .form-field {
+ position:relative;
+ width:8em;
+ min-height:1.5em;
+ margin:.5em 0;
+}
+#main .form .form-field-textarea {
+ min-height:10em;
+}
+#main .form .form-field .input {
+ position:absolute;
+ left:100%;
+}
+
+#nav {
+ float:left;
+ width:200px;
+ font-size:.8em;
+}
+
+#footer {
+ border-top:1px solid #ccc;
+ padding:2em 1.5em 4em;
+ font-size:75%;
+ text-align:right;
+}
+
+
+/**
+ * Account 
+ */
+#register {
+ margin:1em 0; 
+}
+

@@ -11,7 +11,23 @@
 	</head>
 
 <body>
-	<?php echo empty($content) ? '' : $content; ?>
+<div id="container" class="page<?php echo empty($page_title) ? '' : " page-".str_replace('/', '-', Request::instance()->uri()); ?>">
+    <div id="header">
+        <?php echo empty($site_title) ? '' : '<h1>'.$site_title.'</h1>'; ?>
+    </div>
+
+    <?php echo View::factory('template/default/include/nav'); ?>
+
+    <div id="main">
+        <h2><?php echo $page_title; ?></h2>
+        <?php echo empty($content) ? '' : $content; ?>
+    </div>
+
+    <div id="footer">
+        <p>A Client Web Application for the API</p>
+    </div>
+    
+</div>
 </body>
 
 </html>
