@@ -45,7 +45,9 @@
             </div>
         </div>
 
+        <!--
         <a href="#/1" class="button button-workflow-next">Next</a>
+        -->
     </div>
 
     <h3><a href="#">When</a></h3>
@@ -103,7 +105,9 @@
             ?>
         </div>
 
+        <!--
         <a href="#/2" class="button button-workflow-next">Next</a>
+        -->
     </div>
 
     <h3><a href="#">What</a></h3>
@@ -370,6 +374,7 @@ $(function() {
         
     });
 
+    /*
     var event_form_accordian = $("#event_form").accordion({
             "header" : "h3",
             "autoHeight" : false 
@@ -387,6 +392,7 @@ $(function() {
     //console.log(event_form_accordian);
 
     $('a.button-workflow-next').live('click', workflow_next);
+    //*/
 
         
 });
