@@ -17,6 +17,10 @@
     <p><strong><?php echo $event->name; ?></strong></p>
     <p><?php echo $event->venue->name; ?></p>
     <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
-
     <?php echo $event->description; ?>
+</div>
+
+<h3>The Menu</h3>
+<div class="event-menu">
+    <p><?php echo $event->menu; ?></p>
 </div>
