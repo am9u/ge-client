@@ -17,6 +17,10 @@
     <p><strong><?php echo $event->name; ?></strong></p>
     <p><?php echo $event->venue->name; ?></p>
     <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
+    <p>
+        <?php echo $event->venue->address->line_1; ?><br/>
+        <?php echo $event->venue->address->city; ?>, <?php echo $event->venue->address->state_province; ?> <?php echo $event->venue->address->zip; ?><br/>
+    </p>
     <?php echo $event->description; ?>
 </div>
 
