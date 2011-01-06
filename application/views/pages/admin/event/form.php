@@ -38,12 +38,14 @@
             </div>
         </div>
 
-        <div class="form-field">
-            <div class="input">
-                or
-                <?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add New Venue', array('class' => 'button', 'style' => 'white-space:nowrap')); ?>
+        <?php if (empty($event)) { ?>
+            <div class="form-field">
+                <div class="input">
+                    or
+                    <?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add New Venue', array('class' => 'button', 'style' => 'white-space:nowrap')); ?>
+                </div>
             </div>
-        </div>
+        <?php } ?>
 
         <!--
         <a href="#/1" class="button button-workflow-next">Next</a>
