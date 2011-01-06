@@ -15,15 +15,29 @@ class ServiceClient_Driver_User
         $this->username = $user_data->username->value();
         $this->roles    = array();
         
+        // user roles
         foreach($user_data->get('role') as $role)
         {
-            array_push($this->roles, $role->name->value());
+            array_push($this->roles, $role->attributes('name'));
         }
 
+        // group membership and roles
         $this->groups = array();
         foreach($user_data->groups->get('group') as $group)
         {
-            array_push($this->groups, array('id' => $group->attributes('id'), 'name' => $group->name->value()));
+            $group_roles = array();
+            foreach($group->roles->get('role') as $group_role)
+            {
+                array_push($group_roles, $group_role->attributes('name'));
+            }
+
+            array_push($this->groups, array(
+                'id' => $group->attributes('id'), 
+                'name' => $group->name->value(),
+                'roles' => $group_roles,
+            ));
+
         }
     }
 }
+
