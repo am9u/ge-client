@@ -9,9 +9,15 @@ class Controller_Account extends Controller_AuthPage
     public function action_index()
     {
         $this->page_title = 'My Account';
-        $this->_content = 'Logged In!';
+        $view = View::factory('pages/account/index')
+                    ->bind('user', $this->user);
+
+        $this->_content = $view;
     }
 
+    /**
+     * Logs user in
+     */
     public function action_login()
     {
         $this->page_title = 'Login';
@@ -47,6 +53,9 @@ class Controller_Account extends Controller_AuthPage
         }
     }
 
+    /**
+     * Create an account
+     */
     public function action_register()
     {
 
@@ -56,7 +65,7 @@ class Controller_Account extends Controller_AuthPage
             Request::instance()->redirect($redirect_url);
         }
 
-        $this->page_title = 'Register';
+        $this->page_title = 'Create an Account';
         $view = View::factory('pages/account/register');
 
         if ( ! $_POST)
