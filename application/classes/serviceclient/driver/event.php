@@ -8,6 +8,7 @@ class ServiceClient_Driver_Event
     public $date = NULL;
     public $time = NULL;
     public $description = NULL;
+    public $menu = NULL;
 
     public function __construct($event)
     {
@@ -17,6 +18,7 @@ class ServiceClient_Driver_Event
         $this->date        = Date::formatted_time($this->datetime, 'm/d/y', 'America/New_York'); // @TODO: account for timezone of group! ie: NY.com vs LA.com
         $this->time        = Date::formatted_time($this->datetime, 'g:i A', 'America/New_York'); 
         $this->description = $event->description->value();
+        $this->menu        = $event->menu->value();
 
         $this->venue_id = $event->venue->attributes('id');
     }
