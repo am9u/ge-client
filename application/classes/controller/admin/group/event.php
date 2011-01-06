@@ -168,6 +168,11 @@ class Controller_Admin_Group_Event extends Controller_Admin_Event
         }
     }
 
+    public function action_create_workflow()
+    {
+
+    }
+
     //public function action_create_photo()
     //{
     //    if( ! isset($_POST['submit']))

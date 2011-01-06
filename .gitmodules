@@ -7,3 +7,6 @@
 [submodule "modules/xml"]
 	path = modules/xml
 	url = https://github.com/ccazette/Kohana_XML.git
+[submodule "template/shared/jquery.ui.spinner"]
+	path = template/shared/jquery.ui.spinner
+	url = https://github.com/btburnett3/jquery.ui.spinner.git
