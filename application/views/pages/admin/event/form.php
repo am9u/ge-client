@@ -30,12 +30,17 @@
 
                 $select_venues = _select_element_arr($venues, 'id', 'name');
 
-                echo Form::label('venue_id', 'Venue'); 
+                echo Form::label('venue_id', 'Select Venue'); 
             ?>
 
             <div class="input" style="width:30em">
                 <?php echo Form::select('venue_id', $select_venues, (empty($event)) ? NULL : $event->venue_id, array('id' => 'venues_combobox')); ?>
-                <span><?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add Venue', array('class' => 'button')); ?></span>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <div class="input">
+                <?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add New Venue', array('class' => 'button')); ?>
             </div>
         </div>
 
