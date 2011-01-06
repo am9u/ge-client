@@ -1,7 +1,7 @@
 <div id="event_header">
     <h2><?php echo $event->name; ?></h2>
     <p><?php echo $event->venue->name; ?></p>
-    <p><?php echo Date::formatted_time($this->datetime, 'l, F j, Y'); ?></p>
+    <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
     <?php /* <p><?php echo $event->subtitle; ?></p> */ ?>
 </div>
 
@@ -16,7 +16,7 @@
 <div class="event-highlights">
     <p><strong><?php echo $event->name; ?></strong></p>
     <p><?php echo $event->venue->name; ?></p>
-    <p><?php echo Date::formatted_time($this->datetime, 'l, F j, Y'); ?></p>
+    <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
 
     <?php echo $event->description; ?>
 </div>
