@@ -19,7 +19,6 @@
     <?php echo View::factory('template/default/include/nav'); ?>
 
     <div id="main">
-        <h2><?php echo $page_title; ?></h2>
         <?php echo empty($content) ? '' : $content; ?>
     </div>
 
