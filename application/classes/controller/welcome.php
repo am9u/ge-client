@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Welcome extends Controller
+class Controller_Welcome extends Controller_Page
 {
     public function action_index()
     {
-        echo "<h1>A Client Web Application</h1>";
+        $this->_content = '<p>Welcome to the Gastronauts Development site.</p>'; 
     }
 }
 
