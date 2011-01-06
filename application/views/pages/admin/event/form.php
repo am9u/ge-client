@@ -40,7 +40,7 @@
 
         <div class="form-field">
             <div class="input">
-                <?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add New Venue', array('class' => 'button')); ?>
+                <?php echo HTML::anchor(Request::instance()->uri(array('controller' => 'venue', 'action' => 'create')), 'Add New Venue', array('class' => 'button', 'style' => 'white-space:nowrap')); ?>
             </div>
         </div>
 
