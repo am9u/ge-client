@@ -37,9 +37,9 @@ class Controller_AuthPage extends Controller_Page
 
         // Check user auth and role
         $action_name = $request->action;
-        if (($this->auth_required !== FALSE && self::logged_in($this->auth_required) === FALSE)
+        if (($this->auth_required !== FALSE && $this->logged_in($this->auth_required) === FALSE)
                 || (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
-                self::logged_in($this->secure_actions[$action_name]) === FALSE))
+                $this->logged_in($this->secure_actions[$action_name]) === FALSE))
         {
             Kohana::$log->add('debug', 'Controller_AuthPage --> user failed auth roles check');
 
@@ -106,7 +106,10 @@ class Controller_AuthPage extends Controller_Page
 
     }
 
-    protected static function logged_in($roles=NULL)
+    /**
+     * Checks if user is logged in and has privileges to invoke a requested controller's action
+     */
+    protected function logged_in($roles=NULL)
     {
         $logged_in = FALSE;
 
@@ -116,9 +119,11 @@ class Controller_AuthPage extends Controller_Page
         {
             $client = ServiceClient::factory('user');
             $client->identify(array('token' => $token));
+
             if($client->status['type'] === 'success')
             {
-                $user_roles = $client->data->roles;
+                $this->user = $client->data;
+                $user_roles = $this->user->roles;
 
                 if($roles === NULL)
                 {
@@ -183,11 +188,11 @@ class Controller_AuthPage extends Controller_Page
                     foreach($user_groups as $group)
                     {
 
-                        Kohana::$log->add('debug', 'Controller_AuthPage::is_group_required -- group check '.$group['id'].'==='.$group_id);
+                        // Kohana::$log->add('debug', 'Controller_AuthPage::is_group_required -- group check '.$group['id'].'==='.$group_id);
 
                         if(in_array($group['id'], $valid_groups))
                         {
-                            $roles = $groups[$groups['id']];
+                            $roles = $groups[$group['id']];
 
                             if ($roles === TRUE OR $roles === NULL)
                             {
