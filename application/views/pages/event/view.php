@@ -26,11 +26,11 @@
             <?php echo $event->venue->address->line_1; ?><br/>
             <?php echo $event->venue->address->city; ?>, <?php echo $event->venue->address->state_province; ?> <?php echo $event->venue->address->zip; ?><br/>
         </p>
-        <?php echo $event->description; ?>
+        <?php echo Text::auto_p($event->description); ?>
     </div>
 
     <div id="content-tabs-menu">
-        <p><?php echo $event->menu; ?></p>
+        <p><?php echo Text::auto_p($event->menu); ?></p>
     </div>
 </div>
 
