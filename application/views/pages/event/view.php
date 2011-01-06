@@ -12,19 +12,30 @@
 </div>
 */ ?>
 
-<h3>Highlights</h3>
-<div class="event-highlights">
-    <p><strong><?php echo $event->name; ?></strong></p>
-    <p><?php echo $event->venue->name; ?></p>
-    <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
-    <p>
-        <?php echo $event->venue->address->line_1; ?><br/>
-        <?php echo $event->venue->address->city; ?>, <?php echo $event->venue->address->state_province; ?> <?php echo $event->venue->address->zip; ?><br/>
-    </p>
-    <?php echo $event->description; ?>
+<div id="tabs-content">
+    <ul>
+        <li><a href="#content-tabs-highlight">Highlights</a></li>
+        <li><a href="#content-tabs-menu">The Menu</a></li>
+    </ul>
+
+    <div id="content-tabs-highlight">
+        <p><strong><?php echo $event->name; ?></strong></p>
+        <p><?php echo $event->venue->name; ?></p>
+        <p><?php echo Date::formatted_time($event->datetime, 'l, F j, Y'); ?></p>
+        <p>
+            <?php echo $event->venue->address->line_1; ?><br/>
+            <?php echo $event->venue->address->city; ?>, <?php echo $event->venue->address->state_province; ?> <?php echo $event->venue->address->zip; ?><br/>
+        </p>
+        <?php echo $event->description; ?>
+    </div>
+
+    <div id="content-tabs--menu">
+        <p><?php echo $event->menu; ?></p>
+    </div>
 </div>
 
-<h3>The Menu</h3>
-<div class="event-menu">
-    <p><?php echo $event->menu; ?></p>
-</div>
+<script>
+$(function() {
+    $('#tabs-content').tabs();
+});
+</script>
