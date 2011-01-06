@@ -4,6 +4,13 @@ class Controller_Page extends Controller_Website
 {
     protected $_content = '<!-- MAIN VIEW CONTENT -->';
 
+    public function before()
+    {
+        parent::before();
+        array_push($this->scripts, 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js');
+        $this->styles['http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/cupertino/jquery-ui.css'] = 'screen';
+    }
+
 	public function action_index()
 	{
 		//$this->request->response = 'hello, world!';
