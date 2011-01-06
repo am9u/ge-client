@@ -20,6 +20,6 @@ class ServiceClient_Driver_Event
         $this->description = $event->description->value();
         $this->menu        = $event->menu->value();
 
-        $this->venue_id = $event->venue->attributes('id');
+        $this->venue = new ServiceClient_Driver_Venue($event->venue);
     }
 }
