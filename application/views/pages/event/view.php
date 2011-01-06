@@ -29,7 +29,7 @@
         <?php echo $event->description; ?>
     </div>
 
-    <div id="content-tabs--menu">
+    <div id="content-tabs-menu">
         <p><?php echo $event->menu; ?></p>
     </div>
 </div>
