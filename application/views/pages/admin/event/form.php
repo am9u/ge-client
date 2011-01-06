@@ -123,7 +123,7 @@
         <div class="form-field form-field-textarea">
             <?php 
                 echo Form::label('menu', 'Menu'); 
-                echo Form::textarea('menu', (empty($event)) ? '' : NULL /*$event->menu*/, array(
+                echo Form::textarea('menu', (empty($event)) ? '' : $event->menu, array(
                     'width'  => '40',
                     'height' => '20',
                     'class'  => 'input' 
